@@ -6,7 +6,7 @@ websockets==14.*
 
 # LangChain + LangGraph
 langchain==0.3.*
-langchain-openai==0.3.*
+langchain-google-genai==2.*
 langgraph==0.3.*
 
 # Utilities
