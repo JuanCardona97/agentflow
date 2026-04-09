@@ -11,8 +11,7 @@ Implements a state machine that can:
 from typing import AsyncGenerator
 from datetime import datetime, timezone
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from google.api_core import client_options
+from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode
@@ -59,14 +58,11 @@ class SupportAgent:
             search_knowledge_base,
         ]
 
-        self._llm = ChatGoogleGenerativeAI(
+        self._llm = ChatOpenAI(
             model=settings.LLM_MODEL,
             temperature=settings.TEMPERATURE,
-            google_api_key=settings.GOOGLE_API_KEY,
-            client_options=client_options.ClientOptions(
-                api_endpoint="generativelanguage.googleapis.com",
-            ),
-            transport="rest",
+            api_key=settings.GOOGLE_API_KEY,
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
         ).bind_tools(self._tools)
 
         self._memory = MemorySaver()
