@@ -30,13 +30,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+cors_kwargs = {
+    "allow_origins": settings.ALLOWED_ORIGINS,
+    "allow_credentials": True,
+    "allow_methods": ["*"],
+    "allow_headers": ["*"],
+}
+if settings.CORS_REGEX:
+    cors_kwargs["allow_origin_regex"] = settings.CORS_REGEX
+
+app.add_middleware(CORSMiddleware, **cors_kwargs)
 
 
 @app.get("/health")

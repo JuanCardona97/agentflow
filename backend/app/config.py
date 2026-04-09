@@ -18,6 +18,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://localhost:5173",
     ]
+    CORS_REGEX: str = ""
 
     # Server
     HOST: str = "0.0.0.0"
