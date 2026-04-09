@@ -28,12 +28,19 @@ export default function ChatAgent({ sessionId, onToolCalls }) {
 
   // Connect WebSocket on mount
   useEffect(() => {
-    const ws = new WebSocket(`${WS_URL}/ws/${sessionId}`);
+    let ws;
+    try {
+      ws = new WebSocket(`${WS_URL}/ws/${sessionId}`);
+    } catch {
+      console.warn("WebSocket not supported, using REST fallback");
+      wsRef.current = null;
+      return;
+    }
     wsRef.current = ws;
 
     ws.onopen = () => console.log("WebSocket connected");
-    ws.onclose = () => console.log("WebSocket disconnected");
-    ws.onerror = () => console.error("WebSocket error");
+    ws.onclose = () => { wsRef.current = null; };
+    ws.onerror = () => { ws.close(); wsRef.current = null; };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -108,10 +115,9 @@ export default function ChatAgent({ sessionId, onToolCalls }) {
       setActiveTools([]);
 
       const ws = wsRef.current;
-      if (ws && ws.readyState === WebSocket.OPEN) {
+      if (ws?.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ message: question }));
       } else {
-        // Fallback to REST if WebSocket is not connected
         fetchFallback(question);
       }
     },
