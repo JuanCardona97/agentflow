@@ -62,6 +62,7 @@ class SupportAgent:
             model=settings.LLM_MODEL,
             temperature=settings.TEMPERATURE,
             google_api_key=settings.GOOGLE_API_KEY,
+            transport="rest",
         ).bind_tools(self._tools)
 
         self._memory = MemorySaver()
