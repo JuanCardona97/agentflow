@@ -1,0 +1,13 @@
+# Core
+fastapi==0.115.*
+uvicorn[standard]==0.34.*
+pydantic-settings==2.7.*
+websockets==14.*
+
+# LangChain + LangGraph
+langchain==0.3.*
+langchain-google-genai==2.*
+langgraph==0.3.*
+
+# Utilities
+python-dotenv==1.1.*
